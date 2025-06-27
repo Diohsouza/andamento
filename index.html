@@ -1,636 +1,543 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Status do Processo - New Life Consultoria</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root {
-      --primary: #0d4a7a;
-      --primary-light: #1a6fb0;
-      --accent: #ffcc00;
-      --success: #28a745;
-      --warning: #ffc107;
-      --danger: #dc3545;
-      --bg-gradient: linear-gradient(135deg, #1a3a5f, #2c6a9b);
-      --card-bg: #ffffff;
-      --card-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
-      --text-primary: #172b4d;
-      --text-secondary: #42526e;
-      --border: #e1e5eb;
-      --transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Poppins', sans-serif;
-      background: var(--bg-gradient);
-      padding: 20px;
-      color: var(--text-primary);
-    }
-    
-    .container {
-      max-width: 1200px;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
-    
-    .card {
-      background: var(--card-bg);
-      border-radius: 24px;
-      box-shadow: var(--card-shadow);
-      width: 100%;
-      max-width: 500px;
-      overflow: hidden;
-      transform: translateY(0);
-      transition: transform var(--transition);
-      position: relative;
-      z-index: 10;
-    }
-    
-    .card-header {
-      background: linear-gradient(120deg, var(--primary), var(--primary-light));
-      padding: 30px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .card-header::after {
-      content: "";
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-      transform: rotate(30deg);
-      pointer-events: none;
-    }
-    
-    .logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 8px;
-    }
-    
-    .logo i {
-      font-size: 32px;
-      color: var(--accent);
-    }
-    
-    .logo h1 {
-      font-size: 24px;
-      font-weight: 700;
-      color: white;
-      letter-spacing: 0.5px;
-    }
-    
-    .card-title {
-      font-size: 22px;
-      font-weight: 600;
-      color: white;
-      margin-top: 8px;
-    }
-    
-    .card-body {
-      padding: 30px;
-    }
-    
-    .card.hidden { 
-      display: none; 
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    
-    form {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-    
-    .form-group {
-      position: relative;
-    }
-    
-    label {
-      display: block;
-      font-weight: 500;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-    
-    .input-icon {
-      position: absolute;
-      top: 50%;
-      left: 16px;
-      transform: translateY(-50%);
-      color: var(--primary-light);
-      font-size: 16px;
-    }
-    
-    input, select {
-      width: 100%;
-      padding: 16px 16px 16px 48px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      font-size: 16px;
-      font-family: 'Poppins', sans-serif;
-      color: var(--text-primary);
-      transition: all var(--transition);
-      background: rgba(244, 247, 250, 0.5);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-    
-    input:focus, select:focus {
-      border-color: var(--primary-light);
-      outline: none;
-      box-shadow: 0 0 0 4px rgba(26, 111, 176, 0.2);
-      background: white;
-    }
-    
-    button {
-      width: 100%;
-      padding: 16px;
-      font-size: 16px;
-      font-weight: 600;
-      color: white;
-      background: var(--primary);
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      box-shadow: 0 6px 15px rgba(0, 82, 204, 0.3);
-      transition: all var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    
-    button:hover {
-      background: var(--primary-light);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0, 82, 204, 0.4);
-    }
-    
-    .status-container {
-      padding: 0 0 20px;
-    }
-    
-    .status-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-    
-    .status-title {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--primary);
-    }
-    
-    .days-count {
-      background: var(--primary-light);
-      color: white;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: 500;
-    }
-    
-    .progress-container {
-      background: rgba(244, 247, 250, 0.8);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 24px;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-    }
-    
-    .progress-bar {
-      position: relative;
-      width: 100%;
-      height: 28px;
-      background: #e9ecef;
-      border-radius: 14px;
-      overflow: hidden;
-    }
-    
-    .progress-bar__fill {
-      height: 100%;
-      width: 0;
-      background: linear-gradient(90deg, var(--primary), var(--primary-light));
-      transition: width 1s ease;
-      border-radius: 14px;
-    }
-    
-    .progress-bar__label {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translate(-50%, 0);
-      font-size: 14px;
-      font-weight: 600;
-      color: white;
-      line-height: 28px;
-      white-space: nowrap;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-    }
-    
-    .status-message {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      margin-top: 24px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      border-left: 4px solid var(--primary);
-      position: relative;
-    }
-    
-    .status-message::before {
-      content: "\f05a";
-      font-family: "Font Awesome 6 Free";
-      font-weight: 900;
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      color: var(--primary-light);
-      font-size: 18px;
-    }
-    
-    .status-text {
-      padding-left: 32px;
-      font-size: 15px;
-      line-height: 1.6;
-      color: var(--text-secondary);
-    }
-    
-    .status-indicator {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 8px;
-      font-size: 13px;
-      color: var(--text-secondary);
-      padding: 0 5px;
-    }
-    
-    .back-btn {
-      background: var(--text-secondary);
-      margin-top: 20px;
-    }
-    
-    .back-btn:hover {
-      background: #5a6268;
-    }
-    
-    .timeline {
-      margin-top: 30px;
-      position: relative;
-      padding-left: 30px;
-    }
-    
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 10px;
-      top: 5px;
-      height: calc(100% - 10px);
-      width: 2px;
-      background: var(--border);
-    }
-    
-    .timeline-item {
-      position: relative;
-      margin-bottom: 25px;
-    }
-    
-    .timeline-item:last-child {
-      margin-bottom: 0;
-    }
-    
-    .timeline-icon {
-      position: absolute;
-      left: -30px;
-      top: 0;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--primary-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 10px;
-    }
-    
-    .timeline-content {
-      background: white;
-      border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-    }
-    
-    .timeline-title {
-      font-weight: 600;
-      margin-bottom: 5px;
-      color: var(--primary);
-    }
-    
-    .timeline-date {
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .animate {
-      animation: fadeIn 0.6s var(--transition);
-    }
-    
-    @media (max-width: 600px) {
-      .card-header {
-        padding: 20px;
-      }
-      
-      .card-body {
-        padding: 20px;
-      }
-      
-      .logo h1 {
-        font-size: 20px;
-      }
-      
-      .card-title {
-        font-size: 18px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Life - Acompanhamento de Processo</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #2980b9;
+            --success-color: #27ae60;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin: 20px 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 10px;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        button {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: var(--dark-color);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--primary-color);
+        }
+        
+        .status-info {
+            margin-bottom: 25px;
+        }
+        
+        .status-info p {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .status-info strong {
+            color: var(--primary-color);
+        }
+        
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 25px;
+            margin: 30px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .message-box {
+            background: var(--light-color);
+            border-left: 5px solid var(--secondary-color);
+            padding: 20px;
+            border-radius: 5px;
+            margin: 25px 0;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+        
+        .status-message {
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        .tela {
+            display: none;
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .confidential {
+            color: var(--danger-color);
+            font-weight: 600;
+            margin-top: 15px;
+            font-size: 15px;
+        }
+        
+        .status-tag {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        .tag-in-progress {
+            background: #fef9e7;
+            color: var(--warning-color);
+        }
+        
+        .tag-completed {
+            background: #eafaf1;
+            color: var(--success-color);
+        }
+        
+        .tag-pending {
+            background: #ebf5fb;
+            color: var(--secondary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="card animate" id="form-screen">
-      <div class="card-header">
-        <div class="logo">
-          <i class="fas fa-scale-balanced"></i>
-          <h1>New Life Consultoria</h1>
-        </div>
-        <div class="card-title">Consultar Andamento Processual</div>
-      </div>
-      
-      <div class="card-body">
-        <form id="process-form">
-          <div class="form-group">
-            <label for="name">Nome ou Razão Social</label>
-            <div class="input-icon">
-              <i class="fas fa-user"></i>
-            </div>
-            <input type="text" id="name" placeholder="Digite seu nome completo ou razão social" />
-          </div>
-          
-          <div class="form-group">
-            <label for="start-date">Data de Início do Processo</label>
-            <div class="input-icon">
-              <i class="fas fa-calendar"></i>
-            </div>
-            <input type="date" id="start-date" />
-          </div>
-          
-          <div class="form-group">
-            <label for="term">Prazo Estimado</label>
-            <div class="input-icon">
-              <i class="fas fa-clock"></i>
-            </div>
-            <select id="term">
-              <option value="20">20 dias úteis</option>
-              <option value="40">40 dias úteis</option>
-              <option value="60">60 dias úteis</option>
-            </select>
-          </div>
-          
-          <button type="button" onclick="showStatus()">
-            <i class="fas fa-search"></i> Verificar Status
-          </button>
-        </form>
-      </div>
-    </div>
-    
-    <div class="card hidden animate" id="status-screen">
-      <div class="card-header">
-        <div class="logo">
-          <i class="fas fa-file-contract"></i>
-          <h1>New Life Consultoria</h1>
-        </div>
-        <div class="card-title">Andamento Processual</div>
-      </div>
-      
-      <div class="card-body">
-        <div class="status-container">
-          <div class="status-header">
-            <div class="status-title">Status do Processo</div>
-            <div class="days-count" id="days-count">0/0 dias</div>
-          </div>
-          
-          <div class="progress-container">
-            <div class="progress-bar">
-              <div class="progress-bar__fill" id="progress-fill"></div>
-              <span class="progress-bar__label" id="progress-label">0%</span>
-            </div>
-            <div class="status-indicator">
-              <span>Início</span>
-              <span>Conclusão</span>
-            </div>
-          </div>
-          
-          <div class="status-message">
-            <p class="status-text" id="status-text">Preencha o formulário para ver o status do processo.</p>
-          </div>
-          
-          <div class="timeline">
-            <div class="timeline-item">
-              <div class="timeline-icon">
-                <i class="fas fa-check"></i>
-              </div>
-              <div class="timeline-content">
-                <div class="timeline-title">Processo Iniciado</div>
-                <div class="timeline-date" id="start-date-display">-</div>
-              </div>
+    <div class="container">
+        <!-- Tela 1: Entrada de Dados -->
+        <div id="tela-entrada" class="tela active">
+            <header>
+                <div class="logo">New Life</div>
+                <h1>Consultoria Financeira</h1>
+                <p class="subtitle">Sistema de Acompanhamento de Processos</p>
+            </header>
+            
+            <div class="card">
+                <h2>Informações do Processo</h2>
+                <p class="confidential">Todos os dados são tratados com total sigilo e segurança</p>
+                
+                <form id="form-processo">
+                    <div class="form-group">
+                        <label for="nome">Nome / Razão Social:</label>
+                        <input type="text" id="nome" required placeholder="Digite o nome ou razão social">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="data-inicio">Data de Início do Processo:</label>
+                        <input type="date" id="data-inicio" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="prazo">Prazo de Conclusão:</label>
+                        <select id="prazo" required>
+                            <option value="">Selecione o prazo</option>
+                            <option value="20">20 dias úteis</option>
+                            <option value="40">40 dias úteis</option>
+                            <option value="60">60 dias úteis</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" id="btn-verificar">Verificar Status</button>
+                </form>
             </div>
             
-            <div class="timeline-item">
-              <div class="timeline-icon">
-                <i class="fas fa-spinner"></i>
-              </div>
-              <div class="timeline-content">
-                <div class="timeline-title">Análise em Andamento</div>
-                <div class="timeline-date" id="analysis-date">-</div>
-              </div>
-            </div>
-            
-            <div class="timeline-item">
-              <div class="timeline-icon">
-                <i class="fas fa-hourglass-half"></i>
-              </div>
-              <div class="timeline-content">
-                <div class="timeline-title">Conclusão Estimada</div>
-                <div class="timeline-date" id="end-date-display">-</div>
-              </div>
-            </div>
-          </div>
+            <footer>
+                <p>© 2025 New Life Consultoria Financeira. Todos os direitos reservados.</p>
+                <p>Sistema seguro e confidencial - Nenhum dado sensível é exibido</p>
+            </footer>
         </div>
         
-        <button class="back-btn" onclick="goBack()">
-          <i class="fas fa-arrow-left"></i> Voltar ao Início
-        </button>
-      </div>
+        <!-- Tela 2: Status do Processo -->
+        <div id="tela-status" class="tela">
+            <header>
+                <div class="logo">New Life</div>
+                <h1>Acompanhamento de Processo</h1>
+            </header>
+            
+            <div class="card">
+                <div class="status-info">
+                    <p><strong>Nome/Razão Social:</strong> <span id="status-nome"></span></p>
+                    <p><strong>Data de Início:</strong> <span id="status-data-inicio"></span></p>
+                    <p><strong>Dias úteis transcorridos:</strong> 
+                        <span id="dias-transcorridos"></span>
+                        <span id="status-tag" class="status-tag"></span>
+                    </p>
+                </div>
+                
+                <div class="message-box">
+                    <p class="status-message" id="mensagem-andamento"></p>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar">
+                        <div class="progress-text" id="progress-text">0%</div>
+                    </div>
+                </div>
+                
+                <button id="btn-voltar" class="btn-secondary">Voltar</button>
+            </div>
+            
+            <footer>
+                <p>© 2025 New Life Consultoria Financeira. Processo em andamento.</p>
+                <p>Atualizado automaticamente - Consulte regularmente para acompanhar o progresso</p>
+            </footer>
+        </div>
     </div>
-  </div>
 
-  <script>
-    function businessDaysBetween(start, end) {
-      let count = 0;
-      const current = new Date(start);
-      while (current <= end) {
-        const day = current.getDay();
-        if (day !== 0 && day !== 6) count++;
-        current.setDate(current.getDate() + 1);
-      }
-      return count;
-    }
-
-    function formatDate(date) {
-      return new Date(date).toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-      });
-    }
-
-    function calculateEndDate(startDate, term) {
-      const endDate = new Date(startDate);
-      let daysAdded = 0;
-      
-      while (daysAdded < term) {
-        endDate.setDate(endDate.getDate() + 1);
-        if (endDate.getDay() !== 0 && endDate.getDay() !== 6) {
-          daysAdded++;
+    <script>
+        // Lista de feriados nacionais (formato YYYY-MM-DD)
+        const feriados = [
+            // Feriados fixos
+            '2025-01-01', // Confraternização Universal
+            '2025-04-21', // Tiradentes
+            '2025-05-01', // Dia do Trabalho
+            '2025-09-07', // Independência do Brasil
+            '2025-10-12', // Nossa Senhora Aparecida
+            '2025-11-02', // Finados
+            '2025-11-15', // Proclamação da República
+            '2025-12-25', // Natal
+            
+            // Feriados móveis (exemplos para 2025)
+            '2025-03-04', // Carnaval (terça-feira)
+            '2025-04-18', // Sexta-feira Santa
+            '2025-06-19'  // Corpus Christi
+        ];
+        
+        // Referências aos elementos do DOM
+        const telaEntrada = document.getElementById('tela-entrada');
+        const telaStatus = document.getElementById('tela-status');
+        const formProcesso = document.getElementById('form-processo');
+        const btnVoltar = document.getElementById('btn-voltar');
+        
+        // Elementos da tela de status
+        const statusNome = document.getElementById('status-nome');
+        const statusDataInicio = document.getElementById('status-data-inicio');
+        const diasTranscorridos = document.getElementById('dias-transcorridos');
+        const mensagemAndamento = document.getElementById('mensagem-andamento');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const statusTag = document.getElementById('status-tag');
+        
+        // Função para calcular dias úteis entre duas datas
+        function calcularDiasUteis(dataInicio, dataFim) {
+            const start = new Date(dataInicio);
+            const end = new Date(dataFim);
+            let count = 0;
+            
+            // Ajustar datas para o mesmo horário
+            start.setHours(0, 0, 0, 0);
+            end.setHours(0, 0, 0, 0);
+            
+            // Se data de início for maior que data fim, retornar 0
+            if (start > end) return 0;
+            
+            const current = new Date(start);
+            
+            while (current <= end) {
+                const dayOfWeek = current.getDay();
+                const dateStr = formatarData(current);
+                
+                // Verificar se não é fim de semana (sábado=6, domingo=0)
+                if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+                    // Verificar se não é feriado
+                    if (!feriados.includes(dateStr)) {
+                        count++;
+                    }
+                }
+                
+                current.setDate(current.getDate() + 1);
+            }
+            
+            return count;
         }
-      }
-      
-      return endDate;
-    }
-
-    function showStatus() {
-      const name = document.getElementById('name').value.trim();
-      const dateVal = document.getElementById('start-date').value;
-      const term = parseInt(document.getElementById('term').value, 10);
-      
-      if (!name || !dateVal) {
-        alert('Por favor, preencha todos os campos.');
-        return;
-      }
-
-      const startDate = new Date(dateVal);
-      const today = new Date();
-      const daysElapsed = businessDaysBetween(startDate, today);
-      const endDate = calculateEndDate(startDate, term);
-      
-      // Atualiza datas na timeline
-      document.getElementById('start-date-display').textContent = formatDate(startDate);
-      document.getElementById('end-date-display').textContent = formatDate(endDate);
-      
-      // Data estimada para análise (metade do prazo)
-      const analysisDate = calculateEndDate(startDate, Math.floor(term/2));
-      document.getElementById('analysis-date').textContent = formatDate(analysisDate);
-      
-      // Atualiza contagem de dias
-      document.getElementById('days-count').textContent = `${daysElapsed}/${term} dias`;
-      
-      let status = '';
-      let statusIcon = '';
-      
-      if (term === 20) {
-        if (daysElapsed <= 5) {
-          status = 'Processo em fase inicial. Aguardando distribuição ao Juiz responsável.';
-        } else if (daysElapsed <= 19) {
-          status = 'Processo em andamento, documentos sendo analisados pelo setor jurídico.';
-        } else {
-          status = 'Decisão Favorável! Processo finalizado com sucesso.';
+        
+        // Função para formatar data como YYYY-MM-DD
+        function formatarData(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
         }
-      } else if (term === 40) {
-        if (daysElapsed <= 5) {
-          status = 'Processo em fase inicial. Aguardando distribuição ao Juiz responsável.';
-        } else if (daysElapsed <= 19) {
-          status = 'Processo em andamento, documentos sendo analisados pelo setor jurídico.';
-        } else if (daysElapsed <= 21) {
-          status = 'Taxas autorizadas pelo juiz, aguardando pagamento para prosseguimento.';
-        } else if (daysElapsed <= 39) {
-          status = '2ª parcela de taxas foi paga. Aguardando liberação total do processo.';
-        } else {
-          status = 'Decisão Favorável! Processo finalizado com sucesso.';
+        
+        // Função para obter a mensagem de andamento
+        function obterMensagemAndamento(diasTranscorridos, prazo) {
+            if (diasTranscorridos <= 0) {
+                return "Processo ainda não iniciado. Aguarde o início na data informada.";
+            }
+            
+            switch(parseInt(prazo)) {
+                case 20:
+                    if (diasTranscorridos <= 5) 
+                        return "Aguardando distribuição do processo ao Juiz responsável.";
+                    if (diasTranscorridos <= 19) 
+                        return "Processo em andamento, aguardando análise do Juiz.";
+                    if (diasTranscorridos >= 20) 
+                        return "Decisão Favorável, Processo finalizado com sucesso.";
+                    break;
+                    
+                case 40:
+                    if (diasTranscorridos <= 5) 
+                        return "Aguardando distribuição do processo ao Juiz responsável.";
+                    if (diasTranscorridos <= 19) 
+                        return "Processo em andamento, aguardando análise do Juiz.";
+                    if (diasTranscorridos <= 21) 
+                        return "Taxas de liberação já autorizadas, aguardando pagamento.";
+                    if (diasTranscorridos <= 39) 
+                        return "Pagamento da 2ª parcela confirmado. Aguardando liberação total do processo junto ao tribunal.";
+                    if (diasTranscorridos >= 40) 
+                        return "Decisão Favorável, Processo finalizado com sucesso.";
+                    break;
+                    
+                case 60:
+                    if (diasTranscorridos <= 5) 
+                        return "Aguardando distribuição do processo ao Juiz responsável.";
+                    if (diasTranscorridos <= 39) 
+                        return "Processo em andamento, aguardando análise do Juiz.";
+                    if (diasTranscorridos <= 41) 
+                        return "Taxas de liberação já autorizadas, aguardando pagamento.";
+                    if (diasTranscorridos <= 59) 
+                        return "Pagamento da 2ª parcela confirmado. Aguardando liberação total do processo junto ao tribunal.";
+                    if (diasTranscorridos >= 60) 
+                        return "Decisão Favorável, Processo finalizado com sucesso.";
+                    break;
+                    
+                default:
+                    return "Processo em análise. Aguarde atualizações.";
+            }
         }
-      } else {
-        if (daysElapsed <= 5) {
-          status = 'Processo em fase inicial. Aguardando distribuição ao Juiz responsável.';
-        } else if (daysElapsed <= 39) {
-          status = 'Processo em andamento, documentos sendo analisados pelo setor jurídico.';
-        } else if (daysElapsed <= 41) {
-          status = 'Taxas autorizadas pelo juiz, aguardando pagamento para prosseguimento.';
-        } else if (daysElapsed <= 59) {
-          status = '2ª parcela de taxas foi paga. Aguardando liberação total do processo.';
-        } else {
-          status = 'Decisão Favorável! Processo finalizado com sucesso.';
+        
+        // Função para atualizar a barra de progresso
+        function atualizarBarraProgresso(diasTranscorridos, prazo) {
+            let percentual = (diasTranscorridos / prazo) * 100;
+            
+            // Limitar a 100%
+            if (percentual > 100) percentual = 100;
+            
+            progressBar.style.width = percentual + '%';
+            progressText.textContent = Math.round(percentual) + '%';
         }
-      }
-
-      const pct = Math.min((daysElapsed / term) * 100, 100).toFixed(0);
-      document.getElementById('status-text').innerText = status;
-      document.getElementById('progress-fill').style.width = pct + '%';
-      document.getElementById('progress-label').innerText = pct + '%';
-
-      document.getElementById('form-screen').classList.add('hidden');
-      document.getElementById('status-screen').classList.remove('hidden');
-      
-      // Anima a barra de progresso
-      setTimeout(() => {
-        document.getElementById('progress-fill').style.transition = 'width 1.5s ease';
-      }, 300);
-    }
-
-    function goBack() {
-      document.getElementById('status-screen').classList.add('hidden');
-      document.getElementById('form-screen').classList.remove('hidden');
-    }
-    
-    // Configura a data mínima como 30 dias atrás e máxima como hoje
-    window.onload = function() {
-      const today = new Date();
-      const minDate = new Date();
-      minDate.setDate(today.getDate() - 30);
-      
-      const dateInput = document.getElementById('start-date');
-      dateInput.max = today.toISOString().split('T')[0];
-      dateInput.min = minDate.toISOString().split('T')[0];
-      dateInput.value = minDate.toISOString().split('T')[0];
-    };
-  </script>
+        
+        // Função para atualizar a tag de status
+        function atualizarStatusTag(diasTranscorridos, prazo) {
+            statusTag.className = 'status-tag';
+            
+            if (diasTranscorridos <= 0) {
+                statusTag.textContent = 'Aguardando início';
+                statusTag.classList.add('tag-pending');
+            } else if (diasTranscorridos < prazo) {
+                statusTag.textContent = 'Em andamento';
+                statusTag.classList.add('tag-in-progress');
+            } else {
+                statusTag.textContent = 'Concluído';
+                statusTag.classList.add('tag-completed');
+            }
+        }
+        
+        // Evento de envio do formulário
+        formProcesso.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Obter valores do formulário
+            const nome = document.getElementById('nome').value;
+            const dataInicio = document.getElementById('data-inicio').value;
+            const prazo = document.getElementById('prazo').value;
+            
+            // Calcular dias úteis transcorridos
+            const hoje = new Date();
+            const dias = calcularDiasUteis(dataInicio, hoje);
+            
+            // Atualizar tela de status
+            statusNome.textContent = nome;
+            statusDataInicio.textContent = new Date(dataInicio).toLocaleDateString('pt-BR');
+            diasTranscorridos.textContent = `${dias} de ${prazo} dias úteis`;
+            mensagemAndamento.textContent = obterMensagemAndamento(dias, prazo);
+            
+            // Atualizar barra de progresso e tag
+            atualizarBarraProgresso(dias, prazo);
+            atualizarStatusTag(dias, prazo);
+            
+            // Alternar telas
+            telaEntrada.classList.remove('active');
+            telaStatus.classList.add('active');
+        });
+        
+        // Evento do botão Voltar
+        btnVoltar.addEventListener('click', function() {
+            // Limpar formulário
+            formProcesso.reset();
+            
+            // Alternar telas
+            telaStatus.classList.remove('active');
+            telaEntrada.classList.add('active');
+        });
+        
+        // Configurar data mínima e máxima para o campo de data
+        const dataInicioInput = document.getElementById('data-inicio');
+        const hoje = new Date();
+        const maxDate = new Date();
+        maxDate.setFullYear(hoje.getFullYear() + 1);
+        
+        dataInicioInput.min = '2020-01-01';
+        dataInicioInput.max = formatarData(maxDate);
+        dataInicioInput.value = formatarData(new Date());
+    </script>
 </body>
 </html>
